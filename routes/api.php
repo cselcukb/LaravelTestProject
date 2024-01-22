@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\RateLimiter;
+use App\Http\Controllers\API\MarkerAPIController;
+use Illuminate\Cache\RateLimiting\Limit;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+RateLimiter::for('api', function (Request $request) {
+    return Limit::perMinute(15)->by($request->ip());
 });
+
+Route::get('/markers',                  [MarkerAPIController::class, 'list']);
+Route::post('/markers/calculateRoute',  [MarkerAPIController::class, 'calculateRoute']);
+Route::get('/markers/{markerId}',       [MarkerAPIController::class, 'show']);
+Route::post('/markers',                 [MarkerAPIController::class, 'add']);
+Route::post('/markers/{markerId}',      [MarkerAPIController::class, 'edit']);
