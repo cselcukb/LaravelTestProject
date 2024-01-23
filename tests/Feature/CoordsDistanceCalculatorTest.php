@@ -17,7 +17,7 @@ class CoordsDistanceCalculatorTest extends TestCase
      */
     public function testDistance()
     {
-        $distance1 = CoordsDistanceCalculator::distance(
+        $distance1 = CoordsDistanceCalculator::getDistanceBetweenTwoInKms(
             51.5,
             -0.1,
             38.8,
@@ -25,7 +25,7 @@ class CoordsDistanceCalculatorTest extends TestCase
         );
         $this->assertIsFloat($distance1);
 
-        $distance2 = CoordsDistanceCalculator::distance(
+        $distance2 = CoordsDistanceCalculator::getDistanceBetweenTwoInKms(
             51.5,
             -0.1,
             51.5,
