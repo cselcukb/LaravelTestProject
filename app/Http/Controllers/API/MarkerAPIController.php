@@ -8,7 +8,6 @@ use App\Http\Requests\AddMarkerRequest;
 use App\Http\Requests\EditMarkerRequest;
 use App\Models\Marker;
 use Illuminate\Http\Request;
-use App\Classes\CoordsDistanceCalculator;
 
 class MarkerAPIController extends Controller
 {
@@ -21,9 +20,9 @@ class MarkerAPIController extends Controller
             $marker->lng    = $addMarkerRequest->input('lng');
             $marker->color  = $addMarkerRequest->input('color');
             $marker->save();
-            return json_encode(['marker' => $marker]);
+            return response()->json(['status' => 1, 'marker' => $marker], 200);
         }else{
-            return json_encode(['errors' => $addMarkerRequest->errors()]);
+            return response()->json(['status' => 0, 'errors' => $addMarkerRequest->errors()], 500);
         }
     }
     public function edit(EditMarkerRequest $editMarkerRequest, $markerId)
@@ -35,26 +34,26 @@ class MarkerAPIController extends Controller
             $marker->lng    = $editMarkerRequest->input('lng');
             $marker->color  = $editMarkerRequest->input('color');
             $marker->save();
-            return json_encode(['marker' => $marker]);
+            return response()->json(['status' => 1, 'marker' => $marker], 200);
         }else{
-            return json_encode(['errors' => $editMarkerRequest->errors()]);
+            return response()->json(['status' => 0, 'errors' => $editMarkerRequest->errors()], 500);
         }
     }
     public function list()
     {
         $markers            = Marker::all();
-        return json_encode(['markers' => $markers]);
+        return response()->json(['status' => 1, 'markers' => $markers], 200);
     }
     public function show($markerId)
     {
         $marker             = Marker::find($markerId);
-        return json_encode(['marker' => $marker]);
+        return response()->json(['status' => 1, 'marker' => $marker], 200);
     }
     public function calculateRoute(Request $request)
     {
         $markers            = explode(';', $request->input('markers'));
         $markersOrdered     = MarkersHelper::orderMarkersWithShortestDistance($markers);
 
-        return json_encode(['markersOrdered' => $markersOrdered]);
+        return response()->json(['status' => 1, 'markersOrdered' => $markersOrdered], 200);
     }
 }
