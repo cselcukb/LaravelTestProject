@@ -20,9 +20,9 @@ class MarkerAPIController extends Controller
             $marker->lng    = $addMarkerRequest->input('lng');
             $marker->color  = $addMarkerRequest->input('color');
             $marker->save();
-            return response()->json(['status' => 1, 'marker' => $marker], 200);
+            return response()->json(['status' => true, 'marker' => $marker], 200);
         }else{
-            return response()->json(['status' => 0, 'errors' => $addMarkerRequest->errors()], 500);
+            return response()->json(['status' => false, 'errors' => $addMarkerRequest->errors()], 500);
         }
     }
     public function edit(EditMarkerRequest $editMarkerRequest, $markerId)
@@ -42,7 +42,7 @@ class MarkerAPIController extends Controller
     public function list()
     {
         $markers            = Marker::all();
-        return response()->json(['status' => 1, 'markers' => $markers], 200);
+        return response()->json(['status' => true, 'markers' => $markers], 200);
     }
     public function show($markerId)
     {
@@ -53,6 +53,6 @@ class MarkerAPIController extends Controller
     {
         $markersOrdered     = MarkersHelper::orderMarkersWithShortestDistance( json_decode($request->input('markers'), true) );
 
-        return response()->json(['status' => 1, 'markersOrdered' => $markersOrdered], 200);
+        return response()->json(['status' => true, 'markersOrdered' => $markersOrdered], 200);
     }
 }
