@@ -21,7 +21,7 @@ class MarkersHelper
             foreach ( $markers as $marker ) {
                 $startMarkerLatLng  = explode(',', trim( $startMarker ) );
                 $markerLatLng       = explode(',', trim( $marker ) );
-                $distance = CoordsDistanceCalculator::distance(
+                $distance = CoordsDistanceCalculator::getDistanceBetweenTwoInKms(
                     $startMarkerLatLng[0],
                     $startMarkerLatLng[1],
                     $markerLatLng[0],
