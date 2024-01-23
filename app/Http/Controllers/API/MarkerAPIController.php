@@ -59,7 +59,13 @@ class MarkerAPIController extends Controller
     }
     public function calculateRoute(Request $request)
     {
-        $markersOrdered     = MarkersHelper::orderMarkersWithShortestDistance( json_decode($request->input('markers'), true) );
+        $markersArray       = json_decode($request->input('markers'), true);
+        $markersValidated   = MarkersHelper::convertMarkersToLatLngArray( $markersArray );
+        if( !$markersValidated['success'] ){
+            return response()->json(['status' => false, 'error' => $markersValidated['message']], 500);
+        }else{
+            $markersOrdered     = MarkersHelper::orderMarkersWithShortestDistance( $markersValidated['data'] );
+        }
 
         return response()->json(['status' => true, 'markersOrdered' => $markersOrdered], 200);
     }

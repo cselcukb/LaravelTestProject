@@ -19,13 +19,11 @@ class MarkersHelper
             $closestMarker = null;
             $closestDistance = null;
             foreach ( $markers as $marker ) {
-                $startMarkerLatLng  = explode(',', trim( $startMarker ) );
-                $markerLatLng       = explode(',', trim( $marker ) );
                 $distance = CoordsDistanceCalculator::getDistanceBetweenTwoInKms(
-                    $startMarkerLatLng[0],
-                    $startMarkerLatLng[1],
-                    $markerLatLng[0],
-                    $markerLatLng[1],
+                    $startMarker['lat'],
+                    $startMarker['lng'],
+                    $marker['lat'],
+                    $marker['lng'],
                 );
                 if ( $closestDistance === null || $distance < $closestDistance ) {
                     $closestMarker = $marker;
@@ -38,5 +36,21 @@ class MarkersHelper
         }
 
         return $markersInOrder;
+    }
+
+    public static function convertMarkersToLatLngArray( $markers ) {
+        $markersLatLng = [];
+        foreach ( $markers as $marker ) {
+            $markerLatLng = explode(',', trim( $marker ) );
+            if( isset($markerLatLng[0]) && isset($markerLatLng[1] ) ){
+                $markersLatLng[] = [
+                    'lat' => $markerLatLng[0],
+                    'lng' => $markerLatLng[1],
+                ];
+            }else{
+                return AppHelper::returnErrorResponse('Invalid marker format' );
+            }
+        }
+        return AppHelper::returnSuccessResponse( $markersLatLng );
     }
 }
