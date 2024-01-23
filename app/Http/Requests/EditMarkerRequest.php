@@ -24,10 +24,10 @@ class EditMarkerRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'lat' => 'required|numeric',
-            'lng' => 'required|numeric',
-            'color' => 'required|max:255',
+            'name' => 'max:255',
+            'lat' => 'numeric',
+            'lng' => 'numeric',
+            'color' => 'max:255',
         ];
     }
 }
