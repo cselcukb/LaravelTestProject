@@ -28,15 +28,19 @@ class MarkerAPIController extends Controller
     public function edit(EditMarkerRequest $editMarkerRequest, $markerId)
     {
         $marker             = Marker::find($markerId);
-        if( $editMarkerRequest->validated() ){
-            $marker->name   = $editMarkerRequest->input('name');
-            $marker->lat    = $editMarkerRequest->input('lat');
-            $marker->lng    = $editMarkerRequest->input('lng');
-            $marker->color  = $editMarkerRequest->input('color');
-            $marker->save();
-            return response()->json(['status' => 1, 'marker' => $marker], 200);
+        if( $marker ){
+            if( $editMarkerRequest->validated() ){
+                $marker->name   = $editMarkerRequest->input('name');
+                $marker->lat    = $editMarkerRequest->input('lat');
+                $marker->lng    = $editMarkerRequest->input('lng');
+                $marker->color  = $editMarkerRequest->input('color');
+                $marker->save();
+                return response()->json(['status' => true, 'marker' => $marker], 200);
+            }else{
+                return response()->json(['status' => false, 'errors' => $editMarkerRequest->errors()], 500);
+            }
         }else{
-            return response()->json(['status' => 0, 'errors' => $editMarkerRequest->errors()], 500);
+            return response()->json(['status' => false, 'error' => 'Marker not found'], 404);
         }
     }
     public function list()
@@ -47,7 +51,11 @@ class MarkerAPIController extends Controller
     public function show($markerId)
     {
         $marker             = Marker::find($markerId);
-        return response()->json(['status' => 1, 'marker' => $marker], 200);
+        if( $marker ){
+            return response()->json(['status' => true, 'marker' => $marker], 200);
+        }else{
+            return response()->json(['status' => false, 'error' => 'Marker not found'], 404);
+        }
     }
     public function calculateRoute(Request $request)
     {
